@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>设置 - 页面翻译助手</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 480px; margin: 40px auto; padding: 0 16px; }
+    label { display: block; margin: 16px 0 4px; font-size: 14px; }
+    input, textarea { width: 100%; box-sizing: border-box; padding: 6px 8px; font: inherit; }
+    #status { color: #999; font-size: 12px; margin-top: 8px; }
+  </style>
+</head>
+<body>
+  <h2>设置</h2>
+  <label>目标语言（语言代码，如 zh / en / ja / ko）</label>
+  <input id="target-lang" placeholder="zh">
+  <label>忽略站点（域名，逗号分隔）</label>
+  <textarea id="ignored-sites" rows="3" placeholder="example.com, www.example.org"></textarea>
+  <div id="status"></div>
+  <script src="options.js"></script>
+</body>
+</html>

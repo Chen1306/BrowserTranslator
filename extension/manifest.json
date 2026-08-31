@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "页面翻译助手",
+  "version": "0.1.0",
+  "description": "替换式整页翻译：LLM / 免费接口双引擎，支持双语对照",
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js", "ui.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "options_page": "options.html",
+  "permissions": ["storage"],
+  "host_permissions": ["<all_urls>"],
+  "commands": {
+    "translate-page": {
+      "suggested_key": {
+        "default": "Alt+T"
+      },
+      "description": "翻译 / 还原当前页"
+    }
+  }
+}

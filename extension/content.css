@@ -1,0 +1,49 @@
+/* 双语模式：原文以灰色小字显示在译文上方（替换模式不生效） */
+html.bt-dual .bt-trans::before {
+  content: attr(data-original);
+  display: block;
+  color: #999;
+  font-size: 0.85em;
+  line-height: 1.2;
+  margin-bottom: 2px;
+}
+
+/* 选择窗 */
+#bt-panel {
+  position: fixed;
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2147483647;
+  background: #fff;
+  color: #333;
+  font-family: system-ui, sans-serif;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  padding: 12px 16px;
+  font-size: 14px;
+  line-height: 1.8;
+  min-width: 280px;
+}
+#bt-panel .bt-panel-title {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+#bt-panel .bt-field {
+  margin-bottom: 6px;
+}
+#bt-panel .bt-field label {
+  margin-right: 14px;
+  cursor: pointer;
+}
+#bt-panel .bt-llm input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 4px 0;
+  padding: 4px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font: inherit;
+}
