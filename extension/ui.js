@@ -124,14 +124,12 @@ function buildPanel() {
     }
   });
   panel.addEventListener('input', (e) => {
-    const map = { 'bt-base-url': 'baseUrl', 'bt-api-key': 'apiKey', 'bt-model': 'model' };
-    const key = map[e.target.id];
-    if (key) {
-      getSettings().then((s) => {
-        s.llm[key] = e.target.value;
-        save({ llm: s.llm });
-      });
-    }
+    if (!e.target.id.startsWith('bt-')) return;
+    save({ llm: { // 直接取面板当前值，避免异步读-改-写互相覆盖
+      baseUrl: panel.querySelector('#bt-base-url').value.trim(),
+      apiKey: panel.querySelector('#bt-api-key').value,
+      model: panel.querySelector('#bt-model').value.trim()
+    } });
   });
   return panel;
 }
