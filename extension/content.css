@@ -47,3 +47,37 @@ html.bt-dual .bt-trans::before {
   border-radius: 4px;
   font: inherit;
 }
+
+/* 悬浮按钮 */
+#bt-fab {
+  position: fixed;
+  z-index: 2147483647;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #4a7dff;
+  color: #fff;
+  font: 600 18px/44px system-ui, sans-serif;
+  text-align: center;
+  cursor: grab;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  user-select: none;
+}
+#bt-fab:active {
+  cursor: grabbing;
+}
+
+/* 划词浮窗 */
+#bt-tip {
+  position: fixed;
+  z-index: 2147483647;
+  max-width: 320px;
+  background: #fff;
+  color: #333;
+  font: 13px/1.6 system-ui, sans-serif;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  padding: 8px 12px;
+  pointer-events: none;
+}

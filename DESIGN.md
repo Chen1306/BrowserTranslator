@@ -54,7 +54,7 @@ BrowserTranslator/
 2. **双语 / 替换切换零成本**：根元素切 `bt-dual` class，CSS 一条规则 `html.bt-dual .bt-trans::before { content: attr(data-original); … }` 显示原文灰字；切换不重翻译、不动 DOM。
 3. **还原原文（切换式）**：页面已翻译时再次触发（Alt+T / 按钮）= 从 `data-original` 恢复原文文本节点；已还原时再次触发 = 重新翻译。
 4. **引擎降级策略**：background 暴露 `translate(texts, from, to, preferred)` 一个入口，按 首选 → 降级 顺序尝试；超时（AbortController 约 10s）、限流、网络失败即降级；两者皆失败保留原文并在按钮上提示。
-5. **批量翻译**：文本节点按批次合并请求（默认每批 20 段），一次往返返回整批译文；单段失败只跳过该段，不影响全页。
+5. **批量翻译**：文本节点按批次合并请求（默认每批 20 段），一次往返返回整批译文；批次间 3 路并发（LLM 生成耗时为瓶颈，并发提速约 3 倍）；失败批次保留原文，不影响全页。
 6. **会话级缓存**：内存 Map 缓存「原文 → 译文」，重复触发命中缓存不产生新请求。
 7. **免翻区域**：`script / style / pre / textarea / input / contenteditable` 及已带翻译标记的节点一律跳过。
 8. **SPA 适配**：MutationObserver 监听新增节点，节流（约 300ms）后增量翻译。

@@ -26,6 +26,14 @@ function getSettings() {
   return chrome.storage.local.get(DEFAULTS);
 }
 
+// Alt+T：转发翻译指令到当前标签页的内容脚本
+chrome.commands.onCommand.addListener((command) => {
+  if (command !== 'translate-page') return;
+  chrome.tabs.query({ active: true, currentWindow: true }).then(([tab]) => {
+    if (tab?.id != null) chrome.tabs.sendMessage(tab.id, { type: 'translate-page' }).catch(() => {});
+  });
+});
+
 async function translate(texts) {
   const settings = await getSettings();
   const order = settings.engine === 'llm' ? ['llm', 'free'] : ['free', 'llm'];

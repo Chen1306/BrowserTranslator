@@ -34,14 +34,6 @@ async function init() {
     timer = setTimeout(onDomChange, 300);
   }).observe(document.documentElement, { childList: true, subtree: true });
 
-  // 临时验证钩子：按 F9 翻译/还原（页面 CSP 会拦截注入脚本，故改用按键；步骤 5 接入正式入口后可移除）
-  console.log('[BT] content script 已加载');
-  window.addEventListener('keydown', (e) => {
-    if (e.key === 'F9') {
-      console.log('[BT] F9 触发');
-      toggleTranslate().then((r) => console.log('[BT] 结果', r)).catch((err) => console.error('[BT] 异常', err));
-    }
-  });
 }
 
 function applyDualClass() {
@@ -106,7 +98,10 @@ async function translateNodes(nodes) {
     }
     batch.forEach((b, idx) => cache.set(b.text, res.texts[idx]));
   });
-  pairs.forEach((p) => applyTranslation(p.node, cache.get(p.text)));
+  pairs.forEach((p) => {
+    const t = cache.get(p.text);
+    if (t != null) applyTranslation(p.node, t); // 失败的段落保留原文
+  });
   return { ok: allOk, count: pairs.length };
 }
 
