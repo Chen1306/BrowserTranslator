@@ -1,7 +1,7 @@
 // content.js — 整页翻译核心：提取、批量翻译、替换式改写、还原、SPA 监听
 
 const BATCH = 20;
-const state = { translated: false };
+const state = { translated: false, busy: false };
 let settings = { dual: false, ignoredSites: [] };
 const cache = new Map(); // 原文 → 译文（会话级缓存）
 
@@ -42,12 +42,17 @@ function applyDualClass() {
 
 // —— 翻译 / 还原切换 ——
 async function toggleTranslate() {
+  if (state.busy) return { ok: true, action: 'busy' }; // 翻译进行中忽略重复触发
   if (state.translated) {
     restore();
     return { ok: true, action: 'restored' };
   }
-  const res = await translatePage();
-  return res;
+  state.busy = true;
+  try {
+    return await translatePage();
+  } finally {
+    state.busy = false;
+  }
 }
 
 async function translatePage() {

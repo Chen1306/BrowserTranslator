@@ -6,6 +6,7 @@ const TIP_ID = 'bt-tip';
 let panel = null;
 let fab = null;
 let tip = null;
+let tipSeq = 0; // 划词请求序号
 let pendingTranslate = false; // 选择窗关闭后，首次单击按钮 = 翻译当前页
 
 initUI();
@@ -36,14 +37,6 @@ async function initUI() {
 
 function getSettings() {
   return chrome.runtime.sendMessage({ type: 'get-settings' });
-}
-
-async function translatePage() {
-  try {
-    return await chrome.runtime.sendMessage({ type: 'translate-page' });
-  } catch {
-    return { ok: false, error: '内容脚本未响应' };
-  }
 }
 
 // —— 悬浮按钮：可拖动；单击 = 开/关选择窗，关闭选择窗后首次单击 = 翻译 ——
@@ -79,7 +72,7 @@ function buildFab() {
     if (pendingTranslate) {
       pendingTranslate = false;
       fab.textContent = '…';
-      const res = await translatePage();
+      const res = await toggleTranslate(); // content.js 与 ui.js 同一执行上下文，直接调用
       if (res?.ok) {
         fab.textContent = '译';
       } else {
@@ -163,12 +156,13 @@ function buildTip() {
 }
 
 async function showTip(x, y, text) {
+  const seq = ++tipSeq; // 结果返回时只渲染最新一次划词
   tip.textContent = '翻译中…';
   tip.style.display = 'block';
   tip.style.left = `${Math.min(x, Math.max(0, window.innerWidth - 340))}px`;
   tip.style.top = `${Math.min(y + 15, Math.max(0, window.innerHeight - 60))}px`;
   const res = await chrome.runtime.sendMessage({ type: 'translate', texts: [text] });
-  if (tip.style.display === 'none') return; // 期间已被关闭
+  if (seq !== tipSeq || tip.style.display === 'none') return; // 已被新划词或关闭取代
   tip.textContent = res.ok ? res.texts[0] : `翻译失败：${res.error}`;
 }
 
